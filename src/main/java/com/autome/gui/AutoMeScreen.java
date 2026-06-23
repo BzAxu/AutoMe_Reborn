@@ -87,27 +87,32 @@ public class AutoMeScreen extends Screen {
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-        this.renderBackground(ctx, mouseX, mouseY, delta);
+        // 手动画全屏半透明遮罩，不调用 renderBackground 避免 blur 冲突
+        ctx.fill(0, 0, this.width, this.height, 0xAA000000);
 
         int cx = this.width / 2;
         int cy = this.height / 2;
-        int panelTop = cy - PANEL_H / 2;
+        int panelTop    = cy - PANEL_H / 2;
         int panelBottom = cy + PANEL_H / 2;
-        int panelLeft = cx - PANEL_W / 2;
-        int panelRight = cx + PANEL_W / 2;
+        int panelLeft   = cx - PANEL_W / 2;
+        int panelRight  = cx + PANEL_W / 2;
 
+        // 面板背景
         ctx.fill(panelLeft, panelTop, panelRight, panelBottom, 0xCC101010);
-        ctx.fill(panelLeft, panelTop, panelRight, panelTop + 1, 0xFF555555);
-        ctx.fill(panelLeft, panelBottom, panelRight, panelBottom - 1, 0xFF555555);
-        ctx.fill(panelLeft, panelTop, panelLeft + 1, panelBottom, 0xFF555555);
-        ctx.fill(panelRight, panelTop, panelRight - 1, panelBottom, 0xFF555555);
+        // 面板边框
+        ctx.fill(panelLeft,      panelTop,    panelRight,     panelTop + 1,    0xFF555555);
+        ctx.fill(panelLeft,      panelBottom - 1, panelRight, panelBottom,     0xFF555555);
+        ctx.fill(panelLeft,      panelTop,    panelLeft + 1,  panelBottom,     0xFF555555);
+        ctx.fill(panelRight - 1, panelTop,    panelRight,     panelBottom,     0xFF555555);
 
+        // 标题
         ctx.drawCenteredTextWithShadow(
                 this.textRenderer,
                 Text.literal("§e§lAutoMe §r§7设置"),
                 cx, panelTop + 16, 0xFFFFFF
         );
 
+        // 前缀标签
         ctx.drawTextWithShadow(
                 this.textRenderer,
                 Text.literal("§7聊天前缀内容："),
@@ -116,6 +121,7 @@ public class AutoMeScreen extends Screen {
 
         super.render(ctx, mouseX, mouseY, delta);
 
+        // 提示文字
         ctx.drawCenteredTextWithShadow(
                 this.textRenderer,
                 Text.literal("§8示例：/me  /say  /me 前缀"),
