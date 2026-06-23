@@ -68,10 +68,17 @@ public class AutoMeClient implements ClientModInitializer {
         if (!cfg.enabled) return message;
         if (message.isEmpty()) return message;
 
+        // 不转换规则：特殊前缀
         char first = message.charAt(0);
         for (char bp : BYPASS_PREFIXES) {
             if (first == bp) return message;
         }
+
+        // 不转换规则：纯数字
+        if (message.matches("^[0-9]+$")) return message;
+
+        // 不转换规则："all"（不区分大小写）
+        if (message.equalsIgnoreCase("all")) return message;
 
         String prefix = cfg.prefix == null ? "/me" : cfg.prefix.trim();
         if (prefix.isEmpty()) return message;
