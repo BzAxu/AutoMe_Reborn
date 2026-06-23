@@ -87,7 +87,6 @@ public class AutoMeScreen extends Screen {
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-        // 手动画全屏半透明遮罩，不调用 renderBackground 避免 blur 冲突
         ctx.fill(0, 0, this.width, this.height, 0xAA000000);
 
         int cx = this.width / 2;
@@ -97,36 +96,27 @@ public class AutoMeScreen extends Screen {
         int panelLeft   = cx - PANEL_W / 2;
         int panelRight  = cx + PANEL_W / 2;
 
-        // 面板背景
         ctx.fill(panelLeft, panelTop, panelRight, panelBottom, 0xCC101010);
-        // 面板边框
-        ctx.fill(panelLeft,      panelTop,    panelRight,     panelTop + 1,    0xFF555555);
-        ctx.fill(panelLeft,      panelBottom - 1, panelRight, panelBottom,     0xFF555555);
-        ctx.fill(panelLeft,      panelTop,    panelLeft + 1,  panelBottom,     0xFF555555);
-        ctx.fill(panelRight - 1, panelTop,    panelRight,     panelBottom,     0xFF555555);
+        ctx.fill(panelLeft,      panelTop,        panelRight,     panelTop + 1,    0xFF555555);
+        ctx.fill(panelLeft,      panelBottom - 1, panelRight,     panelBottom,     0xFF555555);
+        ctx.fill(panelLeft,      panelTop,        panelLeft + 1,  panelBottom,     0xFF555555);
+        ctx.fill(panelRight - 1, panelTop,        panelRight,     panelBottom,     0xFF555555);
 
-        // 标题
-        ctx.drawCenteredTextWithShadow(
-                this.textRenderer,
+        ctx.drawText(this.textRenderer,
                 Text.literal("§e§lAutoMe §r§7设置"),
-                cx, panelTop + 16, 0xFFFFFF
-        );
+                cx - this.textRenderer.getWidth("AutoMe 设置") / 2,
+                panelTop + 16, 0xFFFFFF, true);
 
-        // 前缀标签
-        ctx.drawTextWithShadow(
-                this.textRenderer,
+        ctx.drawText(this.textRenderer,
                 Text.literal("§7聊天前缀内容："),
-                panelLeft + 20, panelTop + 88, 0xAAAAAA
-        );
+                panelLeft + 20, panelTop + 88, 0xAAAAAA, true);
 
         super.render(ctx, mouseX, mouseY, delta);
 
-        // 提示文字
-        ctx.drawCenteredTextWithShadow(
-                this.textRenderer,
+        ctx.drawText(this.textRenderer,
                 Text.literal("§8示例：/me  /say  /me 前缀"),
-                cx, panelTop + 132, 0x888888
-        );
+                cx - this.textRenderer.getWidth("示例：/me  /say  /me 前缀") / 2,
+                panelTop + 132, 0x888888, true);
     }
 
     @Override
