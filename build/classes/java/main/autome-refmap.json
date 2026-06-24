@@ -1,0 +1,14 @@
+{
+  "mappings": {
+    "com/autome/mixin/ChatScreenMixin": {
+      "sendMessage": "Lnet/minecraft/class_408;method_44056(Ljava/lang/String;Z)V"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "com/autome/mixin/ChatScreenMixin": {
+        "sendMessage": "Lnet/minecraft/class_408;method_44056(Ljava/lang/String;Z)V"
+      }
+    }
+  }
+}

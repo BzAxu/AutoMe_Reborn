@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "autome",
+  "version": "1.0.0",
+  "name": "AutoMe",
+  "description": "自动为聊天消息添加前缀（如 /me），支持白名单服务器自动启用。",
+  "authors": [
+    "BzAxu"
+  ],
+  "contact": {
+    "sources": "https://github.com/BzAxu/AutoMe_Reborn"
+  },
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.autome.AutoMeClient"
+    ]
+  },
+  "mixins": [
+    "autome.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.21",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
