@@ -1,5 +1,5 @@
 # AutoMe — Fabric Client Mod
-
+仅限1.21.11fabric
 > 自动为普通聊天消息添加前缀（如 `/me`），让每条消息都以动作形式发出。
 
 [
