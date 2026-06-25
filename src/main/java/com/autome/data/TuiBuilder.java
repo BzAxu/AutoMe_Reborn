@@ -1,109 +1,102 @@
 package com.autome.data;
 
 import com.autome.config.AutoMeConfig;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
-import java.util.List;
-
 public class TuiBuilder {
 
-    public static Text buildMain() {
+    public static void sendMain() {
         AutoMeConfig cfg = AutoMeConfig.get();
         String displayPrefix = cfg.prefix != null && cfg.prefix.contains("/me")
                 ? "[称号]" : cfg.prefix;
 
-        MutableText out = Text.literal("\n")
-            .append(Text.literal("═══ AutoMe ═══\n").formatted(Formatting.GOLD, Formatting.BOLD))
-            .append(Text.literal("状态: ").formatted(Formatting.GRAY))
+        send(Text.literal(""));
+        send(Text.literal("══════ AutoMe ══════").formatted(Formatting.GOLD, Formatting.BOLD));
+        send(Text.literal("状态: ").formatted(Formatting.GRAY)
             .append(cfg.enabled
                 ? Text.literal("■ 开启").formatted(Formatting.GREEN)
                 : Text.literal("■ 关闭").formatted(Formatting.RED))
             .append(Text.literal("  前缀: ").formatted(Formatting.GRAY))
-            .append(Text.literal(displayPrefix).formatted(Formatting.AQUA))
-            .append(Text.literal("\n──────────────\n").formatted(Formatting.DARK_GRAY));
+            .append(Text.literal(displayPrefix).formatted(Formatting.AQUA)));
+        send(Text.literal("────────────────────").formatted(Formatting.DARK_GRAY));
 
-        // 开关按钮
-        out.append(cfg.enabled
-            ? clickBtn("[ 关闭 ]", "/autome off", Formatting.RED, "点击关闭 AutoMe")
-            : clickBtn("[ 开启 ]", "/autome on", Formatting.GREEN, "点击开启 AutoMe"));
-        out.append(Text.literal("  "));
+        MutableText row1 = Text.literal("");
+        row1.append(cfg.enabled
+            ? btn("[ 关闭 ]", "/autome off", Formatting.RED, "关闭 AutoMe")
+            : btn("[ 开启 ]", "/autome on", Formatting.GREEN, "开启 AutoMe"));
+        row1.append(Text.literal("  "));
+        row1.append(btn("[ 设置前缀 ]", "/autome setprefix", Formatting.YELLOW, "输入新前缀"));
+        send(row1);
 
-        // 设置前缀
-        out.append(clickBtn("[ 设置前缀 ]", "/autome setprefix", Formatting.YELLOW, "点击后在聊天栏输入新前缀"));
-        out.append(Text.literal("  "));
+        MutableText row2 = Text.literal("");
+        row2.append(btn("[ 过滤列表 ]", "/autome filter list", Formatting.LIGHT_PURPLE, "查看屏蔽词"));
+        row2.append(Text.literal("  "));
+        row2.append(btn("[ 历史记录 ]", "/autome history", Formatting.AQUA, "查看前缀历史"));
+        send(row2);
 
-        // 过滤列表
-        out.append(clickBtn("[ 过滤列表 ]", "/autome filter list", Formatting.LIGHT_PURPLE, "查看屏蔽词列表"));
-        out.append(Text.literal("  "));
-
-        // 历史记录
-        out.append(clickBtn("[ 历史记录 ]", "/autome history", Formatting.AQUA, "查看前缀历史"));
-        out.append(Text.literal("\n═══════════════\n").formatted(Formatting.DARK_GRAY));
-
-        return out;
+        send(Text.literal("════════════════════").formatted(Formatting.DARK_GRAY));
     }
 
-    public static Text buildHistory() {
+    public static void sendHistory() {
         AutoMeConfig cfg = AutoMeConfig.get();
-        MutableText out = Text.literal("\n")
-            .append(Text.literal("═══ 历史前缀 ═══\n").formatted(Formatting.GOLD, Formatting.BOLD));
+        send(Text.literal(""));
+        send(Text.literal("══════ 历史前缀 ══════").formatted(Formatting.GOLD, Formatting.BOLD));
 
-        // 置顶
         for (String p : cfg.pinned) {
-            out.append(Text.literal("★ ").formatted(Formatting.YELLOW))
-               .append(Text.literal(p + " ").formatted(Formatting.WHITE))
-               .append(clickBtn("[设置]", "/autome set " + p, Formatting.GREEN, "设置为当前前缀"))
-               .append(Text.literal(" "))
-               .append(clickBtn("[取消置顶]", "/autome unpin " + p, Formatting.GRAY, "取消置顶"))
-               .append(Text.literal("\n"));
+            MutableText line = Text.literal("★ ").formatted(Formatting.YELLOW)
+                .append(Text.literal(p + " ").formatted(Formatting.WHITE))
+                .append(btn("[设置]", "/autome set " + p, Formatting.GREEN, "设为当前前缀"))
+                .append(Text.literal(" "))
+                .append(btn("[取消置顶]", "/autome unpin " + p, Formatting.GRAY, "取消置顶"));
+            send(line);
         }
 
-        if (!cfg.pinned.isEmpty() && !cfg.history.isEmpty()) {
-            out.append(Text.literal("──────────────\n").formatted(Formatting.DARK_GRAY));
-        }
+        if (!cfg.pinned.isEmpty() && !cfg.history.isEmpty())
+            send(Text.literal("────────────────────").formatted(Formatting.DARK_GRAY));
 
-        // 历史
         for (String p : cfg.history) {
-            out.append(Text.literal("  " + p + " ").formatted(Formatting.GRAY))
-               .append(clickBtn("[设置]", "/autome set " + p, Formatting.GREEN, "设置为当前前缀"))
-               .append(Text.literal(" "))
-               .append(clickBtn("[置顶]", "/autome pin " + p, Formatting.YELLOW, "置顶此前缀"))
-               .append(Text.literal("\n"));
+            MutableText line = Text.literal("  " + p + " ").formatted(Formatting.GRAY)
+                .append(btn("[设置]", "/autome set " + p, Formatting.GREEN, "设为当前前缀"))
+                .append(Text.literal(" "))
+                .append(btn("[置顶]", "/autome pin " + p, Formatting.YELLOW, "置顶此前缀"));
+            send(line);
         }
 
-        if (cfg.pinned.isEmpty() && cfg.history.isEmpty()) {
-            out.append(Text.literal("  暂无历史记录\n").formatted(Formatting.DARK_GRAY));
-        }
+        if (cfg.pinned.isEmpty() && cfg.history.isEmpty())
+            send(Text.literal("  暂无历史记录").formatted(Formatting.DARK_GRAY));
 
-        out.append(Text.literal("═══════════════\n").formatted(Formatting.DARK_GRAY));
-        return out;
+        send(Text.literal("════════════════════").formatted(Formatting.DARK_GRAY));
     }
 
-    public static Text buildFilterList() {
+    public static void sendFilterList() {
         AutoMeConfig cfg = AutoMeConfig.get();
-        MutableText out = Text.literal("\n")
-            .append(Text.literal("═══ 屏蔽词列表 ═══\n").formatted(Formatting.GOLD, Formatting.BOLD));
+        send(Text.literal(""));
+        send(Text.literal("══════ 屏蔽词列表 ══════").formatted(Formatting.GOLD, Formatting.BOLD));
 
         for (String f : cfg.filters) {
-            out.append(Text.literal("  " + f + " ").formatted(Formatting.WHITE))
-               .append(clickBtn("[删除]", "/autome filter del " + f, Formatting.RED, "删除此屏蔽词"))
-               .append(Text.literal("\n"));
+            MutableText line = Text.literal("  " + f + " ").formatted(Formatting.WHITE)
+                .append(btn("[删除]", "/autome filter del " + f, Formatting.RED, "删除此屏蔽词"));
+            send(line);
         }
 
-        if (cfg.filters.isEmpty()) {
-            out.append(Text.literal("  暂无屏蔽词\n").formatted(Formatting.DARK_GRAY));
-        }
+        if (cfg.filters.isEmpty())
+            send(Text.literal("  暂无屏蔽词").formatted(Formatting.DARK_GRAY));
 
-        out.append(Text.literal("═══════════════\n").formatted(Formatting.DARK_GRAY));
-        return out;
+        send(Text.literal("════════════════════").formatted(Formatting.DARK_GRAY));
     }
 
-    private static MutableText clickBtn(String label, String command, Formatting color, String hover) {
+    private static void send(Text text) {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if (mc.player != null) mc.player.sendMessage(text, false);
+    }
+
+    private static MutableText btn(String label, String command, Formatting color, String hover) {
         return Text.literal(label).formatted(color)
-                .styled(s -> s
-                    .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
-                    .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                            Text.literal(hover).formatted(Formatting.GRAY))));
+            .styled(s -> s
+                .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command))
+                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                    Text.literal(hover).formatted(Formatting.GRAY))));
     }
 }
