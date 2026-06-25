@@ -1,6 +1,6 @@
-package com/autome.data;
+package com.autome.data;
 
-import com/autome.config.AutoMeConfig;
+import com.autome.config.AutoMeConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
