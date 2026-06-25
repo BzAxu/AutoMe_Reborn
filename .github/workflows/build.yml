@@ -3,6 +3,7 @@ name: Build AutoMe
 on:
   push:
     branches: [ main ]
+    tags: [ 'v*' ]
   workflow_dispatch:
 
 jobs:
@@ -28,5 +29,26 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: autome-mod
-          path: build/libs/*.jar
+          path: build/libs/autome-*.jar
           if-no-files-found: error
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/libs/autome-*.jar
+          body: |
+            ## AutoMe v1.0.0
+            
+            自动为聊天消息添加前缀，支持命令控制与白名单服务器。
+            
+            ### 安装
+            1. 安装 Fabric Loader ≥ 0.15.0
+            2. 下载 Fabric API
+            3. 将 jar 放入 mods 文件夹
+            
+            ### 命令
+            - `/autome on` 启用
+            - `/autome off` 禁用
+            - `/autome set /me` 设置前缀
+            - `/autome status` 查看状态

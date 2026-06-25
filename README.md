@@ -1,5 +1,9 @@
 # AutoMe — Fabric Client Mod
+<<<<<<< HEAD
 仅限1.21.11fabric
+=======
+
+>>>>>>> 2e05b47 (ci: add release workflow)
 > 自动为普通聊天消息添加前缀（如 `/me`），让每条消息都以动作形式发出。
 
 [
@@ -92,6 +96,7 @@
   "enabled": false,
   "prefix": "/me"
 }
+<<<<<<< HEAD
 ```
 
 ---
@@ -119,3 +124,5 @@ chmod +x gradlew
 ## 开源协议
 
 MIT License © BzAxu
+=======
+>>>>>>> 2e05b47 (ci: add release workflow)
