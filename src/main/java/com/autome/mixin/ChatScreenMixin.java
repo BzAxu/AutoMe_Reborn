@@ -14,17 +14,17 @@ public abstract class ChatScreenMixin {
     private void autome_onSend(String message, boolean addToHistory, CallbackInfo ci) {
         String trimmed = message.trim();
 
-        // 拦截 .autome 命令
-        if (trimmed.startsWith(".autome")) {
+        // 拦截 /autome 命令，自己处理不发服务器
+        if (trimmed.equals("/autome") || trimmed.startsWith("/autome ")) {
             ci.cancel();
-            AutoMeClient.handleDotCommand(trimmed);
-            // 关闭聊天框
+            String args = trimmed.length() > 7 ? trimmed.substring(7).trim() : "";
+            AutoMeClient.handleCommand(args);
             net.minecraft.client.MinecraftClient.getInstance().execute(() ->
                 net.minecraft.client.MinecraftClient.getInstance().setScreen(null));
             return;
         }
 
-        // 普通消息前缀处理
+        // 普通消息前缀处理（非命令）
         if (!trimmed.startsWith("/")) {
             String result = AutoMeClient.transformMessage(trimmed);
             if (result == null) {
@@ -38,9 +38,8 @@ public abstract class ChatScreenMixin {
                 net.minecraft.client.MinecraftClient mc = net.minecraft.client.MinecraftClient.getInstance();
                 final String finalResult = result;
                 mc.execute(() -> {
-                    if (mc.player != null) {
+                    if (mc.player != null)
                         mc.player.networkHandler.sendChatMessage(finalResult);
-                    }
                 });
             }
         }

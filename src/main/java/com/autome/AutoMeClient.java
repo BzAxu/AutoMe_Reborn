@@ -29,10 +29,7 @@ public class AutoMeClient implements ClientModInitializer {
         });
     }
 
-    public static void handleDotCommand(String input) {
-        // 去掉 .autome 前缀，取后续参数
-        String args = input.length() > 7 ? input.substring(7).trim() : "";
-
+    public static void handleCommand(String args) {
         if (args.isEmpty()) {
             TuiBuilder.sendMain();
             return;
@@ -53,7 +50,7 @@ public class AutoMeClient implements ClientModInitializer {
                 send("[AutoMe] 已禁用", Formatting.RED);
             }
             case "set" -> {
-                if (parts.length < 2) { send("[AutoMe] 用法: .autome set <前缀>", Formatting.YELLOW); return; }
+                if (parts.length < 2) { send("[AutoMe] 用法: /autome set <前缀>", Formatting.YELLOW); return; }
                 String p = args.substring(3).trim();
                 if ((p.startsWith("\"") && p.endsWith("\"")) ||
                     (p.startsWith("'") && p.endsWith("'")))
@@ -76,13 +73,13 @@ public class AutoMeClient implements ClientModInitializer {
             case "history" -> TuiBuilder.sendHistory();
             case "pin" -> {
                 if (parts.length < 2) return;
-                String p = args.substring(3).trim();
+                String p = args.substring(4).trim();
                 AutoMeConfig.get().pin(p);
                 send("[AutoMe] 已置顶: " + p, Formatting.YELLOW);
             }
             case "unpin" -> {
                 if (parts.length < 2) return;
-                String p = args.substring(5).trim();
+                String p = args.substring(6).trim();
                 AutoMeConfig.get().unpin(p);
                 send("[AutoMe] 已取消置顶: " + p, Formatting.GRAY);
             }
