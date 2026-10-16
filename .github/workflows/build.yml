@@ -38,17 +38,18 @@ jobs:
         with:
           files: build/libs/autome-*.jar
           body: |
-            ## AutoMe v1.0.0
-            
-            自动为聊天消息添加前缀，支持命令控制与白名单服务器。
-            
+            ## AutoMe v1.0.2
+
+            修复聊天前缀为命令时无法正确发送，以及通过 /autome setprefix 设置斜杠前缀的问题。
+
             ### 安装
-            1. 安装 Fabric Loader ≥ 0.15.0
-            2. 下载 Fabric API
-            3. 将 jar 放入 mods 文件夹
-            
-            ### 命令
-            - `/autome on` 启用
-            - `/autome off` 禁用
-            - `/autome set /me` 设置前缀
-            - `/autome status` 查看状态
+            1. 适用于 Minecraft Java 1.21.1 与 Fabric。
+            2. 安装匹配版本的 Fabric Loader 和 Fabric API。
+            3. 将下载的 autome-1.0.2.jar 放入 mods 文件夹。
+
+            ### 常用命令
+            - /autome on 启用
+            - /autome off 禁用
+            - /autome set /me 设置前缀
+            - /autome setprefix 将下一条输入设为前缀
+            - /autome status 查看状态
